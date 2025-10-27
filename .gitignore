@@ -1,0 +1,8 @@
+# Need some answer from nong aong
+.hintrc
+
+node_modules/
+
+.DS_Store
+
+.env
