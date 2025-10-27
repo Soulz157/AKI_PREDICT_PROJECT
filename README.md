@@ -1,4 +1,4 @@
-# mlproject
+# AKI_PREDICTION_PROJECT
 
 To install dependencies:
 
