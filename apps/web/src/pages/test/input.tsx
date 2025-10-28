@@ -185,6 +185,11 @@ const Desktop: React.FC = () => {
                     </div>
                 </div>
             </main>
+
+            <footer className="mt-auto py-4 text-center text-gray-400 text-sm">
+                © 2025 P-AKI Prediction
+            </footer>
+
         </div>
     );
 };
