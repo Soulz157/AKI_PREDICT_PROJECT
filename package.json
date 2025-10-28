@@ -12,7 +12,7 @@
     "dev:build": "bun --cwd ./apps/web build",
     "start:web": "bun --cwd ./apps/web start",
     "lint:web": "bun --cwd ./apps/web lint",
-    "dev:api": "cd apps/backend && source ./venv/bin/activate && uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload",
+    "dev:api": "cd apps/backend && python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload",
     "dev": "concurrently \"bun run dev:web\" \"bun run dev:api\""
   },
   "devDependencies": {
