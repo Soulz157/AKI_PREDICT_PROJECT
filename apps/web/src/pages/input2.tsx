@@ -1,45 +1,44 @@
-"use client"; // จำเป็นสำหรับ useState / useRouter
+"use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "@/context/FromConText";
-import { file } from "bun";
 
 const intraoperativeFields = [
-  { id: "dur_anes", label: "Dur_anes" },
-  { id: "dur_sx", label: "Dur_sx" },
-  { id: "time_ol", label: "Time_OL" },
-  { id: "fluid_ml", label: "Fluid_ml" },
-  { id: "crystalloid_ml", label: "Crystalloid_ml" },
-  { id: "colloid_ml", label: "Colloid_ml" },
-  { id: "total_blood_ml", label: "Total_blood_ml" },
-  { id: "ffp_ml", label: "FFP_ml" },
-  { id: "bl_loss", label: "Bl_loss" },
-  { id: "urine", label: "Urine" },
-  { id: "fluid_balance", label: "Fluid_balance" },
-  { id: "hypotension", label: "Hypotension(Mins)" },
-  { id: "total_hes_ml", label: "Total_HES_ml" },
-  { id: "lowest_sbp", label: "LowestSBP" },
-  { id: "lowest", label: "Lowest" },
-  { id: "lowest_map", label: "Lowest MAP" },
-  { id: "ephedrine", label: "Ephedrine(mg)" },
-  { id: "levophed", label: "Levophed(mcg)" },
+  { id: "Dur_anes", label: "Dur_anes" },
+  { id: "Dur_sx", label: "Dur_sx" },
+  { id: "Time_ol", label: "Time_OL" },
+  { id: "Fluid_ml", label: "Fluid_ml" },
+  { id: "Crystalloid_ml", label: "Crystalloid_ml" },
+  { id: "Colloid_ml", label: "Colloid_ml" },
+  { id: "Total_blood_ml", label: "Total_blood_ml" },
+  { id: "FFP_ml", label: "FFP_ml" },
+  { id: "Bl_loss", label: "Bl_loss" },
+  { id: "Urine", label: "Urine" },
+  { id: "Fluid_balance", label: "Fluid_balance" },
+  { id: "Hypotension", label: "Hypotension(Mins)" },
+  { id: "Total_hes_ml", label: "Total_HES_ml" },
+  { id: "Lowest_sbp", label: "LowestSBP" },
+  { id: "Lowest_dbp", label: "LowestDBP" },
+  { id: "Lowest_map", label: "Lowest MAP" },
+  { id: "Ephedrine", label: "Ephedrine(mg)" },
+  { id: "Levophed", label: "Levophed(mcg)" },
 ];
 
 const dropdownFields = [
-  { id: "type_op", label: "Type_Op" },
-  { id: "op_app", label: "Op_app" },
-  { id: "side_op", label: "Side_op" },
+  { id: "Type_op", label: "Type_Op" },
+  { id: "Op_app", label: "Op_app" },
+  { id: "Side_op", label: "Side_op" },
 ];
 
 const checkboxFields = [
-  { id: "hypoxemia", label: "Hypoxemia" },
-  { id: "hypercarbia", label: "Hypercarbia" },
-  { id: "emer_surg", label: "Emer_surg" },
+  { id: "Hypoxemia", label: "Hypoxemia" },
+  { id: "Hypercarbia", label: "Hypercarbia" },
+  { id: "Emer_surg", label: "Emer_surg" },
 ];
 
 const postoperativeFields = [
-  { id: "retained_ett", label: "RetainedETT(Days)" },
-  { id: "nlr1", label: "NLR1" },
+  { id: "RetainedETT", label: "RetainedETT(Days)" },
+  { id: "Nlr1", label: "NLR1" },
 ];
 
 type OptionSet = {
@@ -47,19 +46,19 @@ type OptionSet = {
 };
 
 const allDropdownOptions: { [key: string]: OptionSet } = {
-  type_op: {
-    "0": "wedge",
-    "1": "segment",
+  Type_op: {
+    "0": "Wedge",
+    "1": "Segment",
     "2": "Lobec",
     "3": "Pnemonect",
-    "4": "decorticate",
-    "5": "other",
+    "4": "Decorticate",
+    "5": "Other",
   },
-  op_app: {
+  Op_app: {
     "0": "Video",
     "1": "Open thoracotomy",
   },
-  side_op: {
+  Side_op: {
     "0": "Left",
     "1": "Right",
     "2": "Both",
@@ -69,15 +68,38 @@ const allDropdownOptions: { [key: string]: OptionSet } = {
 const DesktopInt2: React.FC = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
-  const [error, setError] = useState<string | null>(null);
+  //   const [error, setError] = useState<string | null>(null);
   const [Prediction, setPrediction] = React.useState<string | null>(null);
+  const [conf, setConf] = React.useState<number>(0);
   const { formValues, handleChange } = useForm();
+  const [greeting, setGreeting] = useState<string | null>(null);
 
   const Submit = async (data: Record<string, any>) => {
     console.log("Submitting data:", data);
     setIsLoading(true);
-    setError(null);
+    // setError(null);
     setPrediction(null);
+    setConf(0);
+
+    const cleanData: Record<string, any> = {};
+
+    Object.keys(formValues).forEach((key) => {
+      const value = formValues[key];
+
+      if (value !== null && value !== undefined && value !== "") {
+        cleanData[key] = value;
+      }
+    });
+
+    if (
+      !cleanData ||
+      Object.keys(cleanData).length === 0 ||
+      Object.values(cleanData).includes("")
+    ) {
+      setGreeting("กรุณากรอกข้อมูลให้ครบถ้วน");
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch("http://127.0.0.1:8000/predict", {
@@ -85,7 +107,7 @@ const DesktopInt2: React.FC = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formValues),
+        body: JSON.stringify(cleanData),
       });
 
       if (!response.ok) {
@@ -98,7 +120,7 @@ const DesktopInt2: React.FC = () => {
       const result = await response.json();
 
       console.log("ผลลัพธ์จาก API:", result);
-      const answer =
+      let answer =
         result.prediction_result == 0
           ? " ไม่พบ AKI"
           : result.prediction_result == 1
@@ -107,10 +129,28 @@ const DesktopInt2: React.FC = () => {
           ? " ระยะที่ 2 (Moderate stage)"
           : " ระยะที่ 3 (Severe stage)";
 
+      let conf =
+        result.prediction_result == 0
+          ? result.probabilities.class_0
+          : result.prediction_result == 1
+          ? result.probabilities.class_1
+          : result.prediction_result == 2
+          ? result.probabilities.class_2
+          : result.probabilities.class_3;
+
+      if (!result || typeof result.prediction_result === "undefined") {
+        alert("เกิดข้อผิดพลาด");
+        answer = "เกิดข้อผิดพลาด";
+        conf = 0;
+      }
+
+      console.log("Confidence:", (conf * 100).toFixed(2) + "%");
+
       setPrediction(answer);
+      setConf(conf);
     } catch (err: any) {
       console.error("เกิดข้อผิดพลาดในการส่งฟอร์ม:", err);
-      setError(err.message || "An unknown error occurred.");
+      //   setError(err.message || "An unknown error occurred.");
     } finally {
       setIsLoading(false);
     }
@@ -246,12 +286,21 @@ const DesktopInt2: React.FC = () => {
               <aside className="w-full sm:w-[480px] h-[270px] bg-white rounded-lg border border-red-700 flex flex-col justify-between p-6 sm:p-12">
                 <div className="flex-1 flex items-center justify-center">
                   {Prediction ? (
+                    <div>
+                      <p className="text-gray-500 font-bold text-2xl text-center">
+                        ผลการทำนาย: {Prediction}
+                      </p>
+                      {/* <p className="text-red-500 font-bold text-2xl text-center">
+                        ความมั่นใจ: {(conf * 100).toFixed(2)}%
+                      </p> */}
+                    </div>
+                  ) : greeting ? (
                     <p className="text-gray-500 font-bold text-2xl text-center">
-                      ผลการทำนาย: {Prediction}
+                      {greeting}
                     </p>
                   ) : (
                     <p className="text-gray-500 font-bold text-2xl text-center">
-                      ยังไม่มีการทำนาย
+                      ยังไม่มีผลลัพธ์การทำนาย
                     </p>
                   )}
                 </div>

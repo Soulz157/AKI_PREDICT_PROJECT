@@ -2,7 +2,10 @@ fastapi[all]
 uvicorn
 pandas
 numpy
+lightgbm
 scikit-learn 
-imblearn     
+imblearn 
+os
+pathlib
 tensorflow
 joblib

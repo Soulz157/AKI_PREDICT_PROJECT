@@ -7,57 +7,53 @@ const DesktopInt1: React.FC = () => {
   const router = useRouter();
 
   const demographicFields = [
-    { id: "age", label: "Age" },
-    { id: "bodyWeight", label: "Body Weight" },
-    { id: "height", label: "Height" },
-    { id: "bmi", label: "BMI" },
+    { id: "Age", label: "Age" },
+    { id: "BW", label: "Body Weight" },
+    { id: "Height", label: "Height" },
+    { id: "BMI", label: "BMI" },
   ];
 
   const dropdownFields = [
-    { id: "asa", label: "ASA" },
-    { id: "dx", label: "DX" },
-    { id: "gender", label: "Gender" },
+    { id: "ASAgr", label: "ASA" },
+    { id: "Dx", label: "DX" },
+    { id: "Gender", label: "Gender" },
   ];
 
   const comorbidityCheckboxes = [
-    { id: "ht", label: "HT" },
-    { id: "dm", label: "DM" },
-    { id: "copd", label: "COPD" },
-    { id: "cvd", label: "CVD" },
-    { id: "dlp", label: "DLP" },
-    { id: "cad", label: "CAD" },
+    { id: "HT", label: "HT" },
+    { id: "DM", label: "DM" },
+    { id: "COPD", label: "COPD" },
+    { id: "CVD", label: "CVD" },
+    { id: "DLP", label: "DLP" },
+    { id: "CAD", label: "CAD" },
   ];
 
   const medicationCheckboxes = [
-    { id: "nsaids", label: "NSAIDs" },
-    { id: "acei", label: "ACEI" },
-    { id: "statin", label: "Statin" },
-    { id: "arb", label: "ARB" },
-    { id: "diuretics", label: "Diuretics" },
+    { id: "NSAIDs", label: "NSAIDs" },
+    { id: "ACEI", label: "ACEI" },
+    { id: "Statin", label: "Statin" },
+    { id: "ARB", label: "ARB" },
+    { id: "Diuretics", label: "Diuretics" },
   ];
 
   const labFields = [
-    { id: "preHb", label: "Pre Hb" },
-    { id: "alb", label: "Alb" },
-    { id: "preCr", label: "Pre Cr" },
-    { id: "preGfr", label: "PreGFR" },
+    { id: "Pre Hb", label: "Pre Hb" },
+    { id: "Alb", label: "Alb" },
+    { id: "Pre Cr", label: "Pre Cr" },
+    { id: "PreGFR", label: "PreGFR" },
   ];
 
-  type OptionSet = {
-    [key: string]: string;
-  };
-
   const allOption: { [key: string]: OptionSet } = {
-    gender: {
+    Gender: {
       "1": "Male",
       "0": "Female",
     },
-    dx: {
+    Dx: {
       "0": "Benign",
       "1": "Malignant",
       "2": "Infection",
     },
-    asa: {
+    ASAgr: {
       "0": "ASA0",
       "1": "ASA1",
       "2": "ASA2",
@@ -66,6 +62,9 @@ const DesktopInt1: React.FC = () => {
     },
   };
 
+  type OptionSet = {
+    [key: string]: string;
+  };
   const { formValues, handleChange } = useForm();
 
   return (
@@ -126,6 +125,8 @@ const DesktopInt1: React.FC = () => {
                     </label>
                     <select
                       className="select select-bordered w-full"
+                      id={field.id}
+                      value={formValues[field.id] || ""}
                       onChange={(e) =>
                         handleChange(e.target.id, e.target.value)
                       }
