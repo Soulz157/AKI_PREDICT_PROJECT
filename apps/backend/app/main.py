@@ -20,9 +20,9 @@ app.add_middleware(
 )
 
 try:
-    model = joblib.load('aki_model.joblib')
+    model = joblib.load('LGBM_Optuna_Model.joblib')
 except FileNotFoundError:
-    print("WARNING: ไม่พบไฟล์โมเดล 'aki_model.joblib'")
+    print("WARNING: ไม่พบไฟล์โมเดล 'LGBM_Optuna_Model.joblib'")
     print("ใช้โมเดลจำลอง (dummy model) สำหรับการทดสอบ")
 
     class DummyModel:

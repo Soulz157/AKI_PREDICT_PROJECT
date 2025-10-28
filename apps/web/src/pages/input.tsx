@@ -126,7 +126,6 @@ const DesktopInt1: React.FC = () => {
                     </label>
                     <select
                       className="select select-bordered w-full"
-                      value={formValues[field.id] || ""}
                       onChange={(e) =>
                         handleChange(e.target.id, e.target.value)
                       }
